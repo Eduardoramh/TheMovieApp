@@ -22,12 +22,24 @@ export default function DrawerContent(props) {
                 <Drawer.Item label='Peliculas populares' active={active === "popular"} onPress={() => onChangeScreen('popular')}  />
                 <Drawer.Item label='Nuevas Peliculas' active={active === "news"} onPress={() => onChangeScreen('news')}  />
             </Drawer.Section>
+            <Drawer.Section title="Opciones">
+            <TouchableRipple>
+                <View style={styles.preference}>
+                    <Text>Tema Oscuro</Text>
+                    <Switch value={theme === 'dark'} onValueChange={toggleTheme} />
+                </View>
+            </TouchableRipple>
+            </Drawer.Section>
         </DrawerContentScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    text: {
-        backgroundColor: "black",
+    preference: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingVertical: 12,
+        paddingHorizontal: 16,
     },
 })
