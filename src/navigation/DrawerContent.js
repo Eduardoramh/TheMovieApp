@@ -13,7 +13,7 @@ export default function DrawerContent(props) {
     };
 
     return (
-        <DrawerContentScrollView style={styles.text}>
+        <DrawerContentScrollView >
             <Drawer.Section>
                 <Drawer.Item label='Inicio' active={active === "home"} onPress={() => onChangeScreen('home')} />
                 <Drawer.Item label='Peliculas populares' active={active === "popular"} onPress={() => onChangeScreen('popular')}  />
