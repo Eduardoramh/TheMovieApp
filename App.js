@@ -9,7 +9,7 @@ export default function App() {
     <PaperProvider>
       <SafeAreaView>
         <Text>Hola Mundo</Text>
-        <Button mode="contained" onPress={() => console.log('Pressed')}>
+        <Button icon="image" mode="contained" onPress={() => console.log('Pressed')}>
           Press me
         </Button>
 
