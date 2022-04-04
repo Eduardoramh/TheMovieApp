@@ -4,10 +4,10 @@ import { Title } from "react-native-paper";
 import { getNewsMoviesApi } from "../api/movies";
 import CarouselVertical from "../components/CarouselVertical";
 
-export default function Home() {
+export default function Home(props) {
+    const {navigation} = props;
     const [newMovies, setNewMovies] = useState(null);
     
-    console.log(newMovies);
 
     useEffect(() => {
         getNewsMoviesApi().then((response) => {
@@ -20,7 +20,7 @@ export default function Home() {
             {newMovies && (
                 <View style={styles.news}>
                     <Title style={styles.newsTitle}>Nuevas películas</Title>
-                    <CarouselVertical data={newMovies}/>
+                    <CarouselVertical data={newMovies} navigation={navigation}/>
                 </View>
             )}
         </ScrollView>
