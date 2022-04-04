@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Title } from "react-native-paper";
-import { getNewsMoviesApi, getAllGenresApi } from "../api/movies";
+import { getNewsMoviesApi, getAllGenresApi,getGenreMoviesApi } from "../api/movies";
 import CarouselVertical from "../components/CarouselVertical";
 import {initial, map} from "lodash"
 
@@ -10,6 +10,7 @@ export default function Home(props) {
     const [newMovies, setNewMovies] = useState(null);
     const [genreList, setGenreList] = useState([]);
     const [genreSlect, setGenreSelected] = useState(28);
+    const [genreMovies, setGenreMovies] = useState(null)
 
 
     useEffect(() => {
@@ -24,10 +25,17 @@ export default function Home(props) {
         });
     }, []);
 
-    const onChangeGenre = (newGenreId) =>{
-        
+    useEffect(() => {
+        getGenreMoviesApi(genreSlect).then((response) => {
+            setGenreMovies(response.results);
+        });
+    }, [genreSlect]);
+
+    const onChangeGenre = (newGenreId) =>{        
         setGenreSelected(newGenreId);
     }
+
+    
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
