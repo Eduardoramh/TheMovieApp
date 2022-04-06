@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, Image, } from 'react-native';
+import { StyleSheet, View, ScrollView, Image } from 'react-native';
 import { Text, Title, IconButton } from 'react-native-paper';
-import { map } from "lodash"
+import { map } from 'lodash';
+import { Rating } from 'react-native-ratings';
 import ModalVideo from '../components/ModalVideo';
 import { getMovieByIdApi } from '../api/movies';
 import { BASE_PATH_IMG } from '../utils/constants';
-
+import usePreferences from '../hooks/usePreferences';
+import starDark from '../assets/png/starDark.png';
+import starLight from '../assets/png/starLight.png';
 
 export default function Movie(props) {
   const { route } = props;
   const { id } = route.params;
   const [movie, setMovie] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
-
 
   useEffect(() => {
     getMovieByIdApi(id).then((response) => {
@@ -24,13 +26,17 @@ export default function Movie(props) {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <MovieImage posterPath={movie.poster_path} />
         <MovieTrailer setShowVideo={setShowVideo} />
         <MovieTitle movie={movie} />
+        <MovieRating
+          voteCount={movie.vote_count}
+          voteAverage={movie.vote_average}
+        />
+        
       </ScrollView>
       <ModalVideo show={showVideo} setShow={setShowVideo} idMovie={id} />
-
     </>
   );
 }
@@ -55,7 +61,7 @@ function MovieTrailer(props) {
     <View style={styles.viewPlay}>
       <IconButton
         icon="play"
-        color='#000'
+        color="#000"
         size={30}
         style={styles.play}
         onPress={() => setShowVideo(true)}
@@ -68,13 +74,37 @@ function MovieTitle(props) {
   const { movie } = props;
 
   return (
-    <View style={styles.vieInfo}>
+    <View style={styles.viewInfo}>
       <Title>{movie.title}</Title>
       <View style={styles.viewGenres}>
         {map(movie.genres, (genre) => (
-          <Text key={genre.id} style={styles.genre}>{genre.name}</Text>
+          <Text key={genre.id} style={styles.genre}>
+            {genre.name}
+          </Text>
         ))}
       </View>
+    </View>
+  );
+}
+
+function MovieRating(props) {
+  const { voteCount, voteAverage } = props;
+  const media = voteAverage / 2;
+  const { theme } = usePreferences();
+
+  return (
+    <View style={styles.viewRating}>
+      <Rating
+        type="custom"
+        ratingImage={theme === 'dark' ? starDark : starLight}
+        ratingColor="#ffc205"
+        ratingBackgroundColor={theme === 'dark' ? '#192734' : '#f0f0f0'}
+        startingValue={media}
+        imageSize={20}
+        style={{ marginRight: 15 }}
+      />
+      <Text style={{ fontSize: 16, marginRight: 5 }}>{media}</Text>
+      <Text style={{ fontSize: 12, color: '#8697a5' }}>{voteCount} votos</Text>
     </View>
   );
 }
@@ -100,21 +130,28 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   play: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginTop: -40,
     marginRight: 30,
     width: 60,
     height: 60,
     borderRadius: 100,
   },
-  vieInfo: {
-    marginHorizontal: 30
+  viewInfo: {
+    marginHorizontal: 30,
   },
   viewGenres: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   genre: {
     marginRight: 20,
-    color: "#8697a5"
+    color: '#8697a5',
   },
+  viewRating: {
+    marginHorizontal: 30,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+ 
 });
