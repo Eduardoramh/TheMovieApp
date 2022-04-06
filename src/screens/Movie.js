@@ -27,7 +27,7 @@ export default function Movie(props) {
         <MovieImage posterPath={movie.poster_path} />
         <MovieTrailer setShowVideo={setShowVideo}/>
       </ScrollView>
-      <ModalVideo show={showVideo} setShow={setShowVideo}/>
+      <ModalVideo show={showVideo} setShow={setShowVideo} idMovie={id}/>
     </>
   );
 }
